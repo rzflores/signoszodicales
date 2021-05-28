@@ -1,16 +1,16 @@
 
-const { APP_BASE_HREF } = require('@angular/common');
+//Install express server
 const express = require('express');
-const app  = express();
+const path = require('path');
 
+const app = express();
 
-app.use(express.static(__dirname+'/dist'));
+// Serve only the static files form the dist directory
+app.use(express.static('./dist/angular-app-heroku'));
 
+app.get('/*', (req, res) =>
+    res.sendFile('index.html', {root: 'dist/angular-app-heroku/'}),
+);
 
-app.listen(process.env.PORT);
-
-app.get('/*', (req , res) => {
-    res.sendFile(path.join(__dirname+'/dist/index.html'));
-});
-
-console.log('listenning');
+// Start the app by listening on the default Heroku port
+app.listen(process.env.PORT || 8080);
